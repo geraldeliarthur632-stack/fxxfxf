@@ -21,6 +21,7 @@ import com.example.ui.screens.*
 enum class NavTab {
     HOME,
     PATH,
+    TUNER,
     STORE,
     ACHIEVEMENTS,
     PROFILE
@@ -249,6 +250,24 @@ fun AppNavigation(
                             )
 
                             NavigationBarItem(
+                                selected = activeTab == NavTab.TUNER,
+                                onClick = { activeTab = NavTab.TUNER },
+                                icon = {
+                                    Icon(
+                                        imageVector = if (activeTab == NavTab.TUNER) Icons.Filled.GraphicEq else Icons.Outlined.GraphicEq,
+                                        contentDescription = "Afinador"
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = "Afinador",
+                                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (activeTab == NavTab.TUNER) FontWeight.Bold else FontWeight.Normal)
+                                    )
+                                },
+                                modifier = Modifier.testTag("nav_tab_tuner")
+                            )
+
+                            NavigationBarItem(
                                 selected = activeTab == NavTab.STORE,
                                 onClick = { activeTab = NavTab.STORE },
                                 icon = {
@@ -320,7 +339,8 @@ fun AppNavigation(
                                     onNavigateAchievements = { activeTab = NavTab.ACHIEVEMENTS },
                                     onNavigateHistory = { navigateTo(Screen.History) },
                                     onNavigateSettings = { navigateTo(Screen.Settings) },
-                                    onNavigateSupport = { navigateTo(Screen.HelpSupport) }
+                                    onNavigateSupport = { navigateTo(Screen.HelpSupport) },
+                                    onNavigateTuner = { activeTab = NavTab.TUNER }
                                 )
                             }
                             NavTab.PATH -> {
@@ -332,6 +352,13 @@ fun AppNavigation(
                                     },
                                     onStoreClick = { activeTab = NavTab.STORE },
                                     onWatchAdClick = { navigateTo(Screen.RewardedAd) }
+                                )
+                            }
+                            NavTab.TUNER -> {
+                                TunerScreen(
+                                    currentInstrument = userProfile.selectedInstrument,
+                                    language = userProfile.language,
+                                    onBack = { activeTab = NavTab.HOME }
                                 )
                             }
                             NavTab.STORE -> {

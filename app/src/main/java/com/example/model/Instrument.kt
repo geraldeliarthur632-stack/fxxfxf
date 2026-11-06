@@ -26,14 +26,14 @@ enum class InstrumentType(
         descEs = "Aprende acordes, cifrados, ritmos, arpegios y tus canciones favoritas en guitarra clásica y acústica.",
         drawableRes = R.drawable.instrument_guitar,
         tuningInfo = "E - A - D - G - B - E (Mi, Lá, Ré, Sol, Si, Mi)",
-        category = "Cordas"
+        category = "Cordas Acústicas"
     ),
     VIOLA_CAIPIRA(
         id = "viola",
         namePt = "Viola Caipira",
         nameEn = "Brazilian Viola",
         nameEs = "Viola Campesina",
-        descPt = "Descubra a alma da música caipira brasileira com 10 cordas de puro som, ponteados, afinações Cebolão e Boiadeiro.",
+        descPt = "Descubra a alma da música de raiz brasileira com 10 cordas de aço, ponteados, afinação Cebolão e toadas.",
         descEn = "Discover the rich 10-string Brazilian folk guitar traditions, picking techniques and traditional tunings.",
         descEs = "Descubre la rica tradición de la viola campesina brasileña de 10 cuerdas, punteos y afinaciones tradicionales.",
         drawableRes = R.drawable.instrument_viola,
@@ -50,7 +50,7 @@ enum class InstrumentType(
         descEs = "Desarrolla la coordinación bimanual, lectura en clave de Sol y Fa, dinámicas y obras para piano.",
         drawableRes = R.drawable.instrument_piano,
         tuningInfo = "88 Teclas temperadas (A0 a C8) com afinação padrão A4 = 440 Hz",
-        category = "Teclas e Cordas Percutidas"
+        category = "Teclas e Acústico"
     ),
     TECLADO(
         id = "teclado",
@@ -63,6 +63,54 @@ enum class InstrumentType(
         drawableRes = R.drawable.instrument_keyboard,
         tuningInfo = "61 Teclas eletrônicas (C2 a C7) com timbres General MIDI e sintetizador",
         category = "Eletrônicos e Teclas"
+    ),
+    BATERIA(
+        id = "bateria",
+        namePt = "Bateria",
+        nameEn = "Drums",
+        nameEs = "Batería",
+        descPt = "Domine independência dos 4 membros, condução de chimbal, bumbo, caixa, viradas dinâmicas e grooves de todos os estilos.",
+        descEn = "Master four-limb independence, hi-hat grooves, kick, snare, drum fills and diverse musical beats.",
+        descEs = "Domina la independencia de las 4 extremidades, grooves de charles, bombo, caja y redobles dinámicos.",
+        drawableRes = R.drawable.instrument_drums,
+        tuningInfo = "Kit padrão: Bumbo, Caixa, Chimbal, Tons 1 e 2, Surdo e Pratos de Condução/Ataque",
+        category = "Percussão e Ritmo"
+    ),
+    BAIXO(
+        id = "baixo",
+        namePt = "Contrabaixo",
+        nameEn = "Bass Guitar",
+        nameEs = "Bajo Eléctrico",
+        descPt = "A espinha dorsal da banda: aprenda condução de baixo, slap, pizzicato, arpejos, escalas e conexão rítmica com a bateria.",
+        descEn = "The groove foundation: learn walking bass, slap, fingerstyle, arpeggios and lock-in timing with drums.",
+        descEs = "La base del ritmo: aprende walking bass, slap, técnica de dedos, arpegios y sincronización musical.",
+        drawableRes = R.drawable.instrument_bass,
+        tuningInfo = "E - A - D - G (Mi, Lá, Ré, Sol) em 4 cordas de aço",
+        category = "Cordas Graves"
+    ),
+    UKULELE(
+        id = "ukulele",
+        namePt = "Ukulele",
+        nameEn = "Ukulele",
+        nameEs = "Ukelele",
+        descPt = "Leve, alegre e portátil: toque suas primeiras canções em minutos com batidas havaianas, dedilhados e acordes simples.",
+        descEn = "Fun, portable and light: play your first songs in minutes with Hawaiian strums, fingerpicking and chords.",
+        descEs = "Alegre, portátil y accesible: toca tus primeras canciones con rasgueos hawaianos y acordes sencillos.",
+        drawableRes = R.drawable.instrument_ukulele,
+        tuningInfo = "G - C - E - A (Sol reentrante, Dó, Mi, Lá)",
+        category = "Cordas Havaianas"
+    ),
+    VIOLINO(
+        id = "violino",
+        namePt = "Violino",
+        nameEn = "Violin",
+        nameEs = "Violín",
+        descPt = "A nobreza do arco: desenvolva empunhadura do arco, afinação precisa sem trastes, vibrato, postura e obras clássicas e populares.",
+        descEn = "The art of the bow: master bow hold, fretless intonation, vibrato, posture and classical melodies.",
+        descEs = "El arte del arco: domina la sujeción del arco, afinación precisa sin trastes, vibrato y melodías clásicas.",
+        drawableRes = R.drawable.instrument_violin,
+        tuningInfo = "G - D - A - E (Sol, Ré, Lá, Mi) afinado em quintas justas",
+        category = "Cordas Friccionadas"
     );
 
     fun getName(lang: AppLanguage): String = when (lang) {
@@ -77,18 +125,3 @@ enum class InstrumentType(
         AppLanguage.ES -> descEs
     }
 }
-
-data class FutureInstrument(
-    val id: String,
-    val namePt: String,
-    val nameEn: String,
-    val nameEs: String,
-    val iconName: String
-)
-
-val COMING_SOON_INSTRUMENTS = listOf(
-    FutureInstrument("bateria", "Bateria", "Drums", "Batería", "Drum"),
-    FutureInstrument("baixo", "Contrabaixo", "Bass Guitar", "Bajo", "Bass"),
-    FutureInstrument("ukulele", "Ukulele", "Ukulele", "Ukelele", "Ukulele"),
-    FutureInstrument("violino", "Violino", "Violin", "Violín", "Violin")
-)

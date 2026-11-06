@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
@@ -22,15 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.data.GoogleAuthHelper
 import com.example.model.AppLanguage
 import com.example.model.AppStrings
 import com.example.ui.components.MascotBubble
+import kotlinx.coroutines.launch
 
 @Composable
 fun WelcomeScreen(
@@ -40,9 +43,12 @@ fun WelcomeScreen(
     onCreateAccount: () -> Unit,
     onContinueGuest: () -> Unit
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var showGoogleDialog by remember { mutableStateOf(false) }
-    var customGoogleEmail by remember { mutableStateOf("aluno.musical@gmail.com") }
-    var customGoogleName by remember { mutableStateOf("Músico Google") }
+    var customGoogleEmail by remember { mutableStateOf("geraldeliarthur632@gmail.com") }
+    var customGoogleName by remember { mutableStateOf("Arthur Geraldeli") }
+    var isLoadingGoogle by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -73,17 +79,19 @@ fun WelcomeScreen(
                 // Official Brand Logo Badge
                 Box(
                     modifier = Modifier
-                        .size(92.dp)
+                        .size(108.dp)
                         .offset(y = 65.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF1E1B4B))
-                        .border(3.dp, Color(0xFFF59E0B), CircleShape),
+                        .clip(RoundedCornerShape(26.dp))
+                        .background(Color(0xFF1A0438))
+                        .border(3.dp, Color(0xFF8B5CF6), RoundedCornerShape(26.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.app_brand_logo),
                         contentDescription = "Logo Mundo da Música",
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(24.dp)),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -95,7 +103,8 @@ fun WelcomeScreen(
                 text = AppStrings.get("app_title", language),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    letterSpacing = 0.5.sp
                 ),
                 textAlign = TextAlign.Center
             )
@@ -113,30 +122,77 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(14.dp))
 
             MascotBubble(
-                message = "Olá! Eu sou o Maestro Pipo. Escolha como quer entrar para começarmos sua aventura musical!",
+                message = "Olá! Eu sou o Maestro Pipo. Escolha como quer entrar para começarmos sua aventura musical no estúdio!",
                 mascotName = "Maestro Pipo"
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 1. Google Sign-In
-            Button(
-                onClick = { showGoogleDialog = true },
+            // 1. Google Sign-In with Official Studio Brand Card Button
+            Surface(
+                onClick = {
+                    isLoadingGoogle = true
+                    scope.launch {
+                        GoogleAuthHelper.signInWithGoogle(
+                            context = context,
+                            onSuccess = { email, name ->
+                                isLoadingGoogle = false
+                                onLoginGoogle(email, name)
+                            },
+                            onError = {
+                                isLoadingGoogle = false
+                                showGoogleDialog = true
+                            },
+                            onFallbackPrompt = {
+                                isLoadingGoogle = false
+                                showGoogleDialog = true
+                            }
+                        )
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp)
+                    .height(54.dp)
                     .testTag("welcome_login_google"),
                 shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                color = MaterialTheme.colorScheme.surface,
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.outlineVariant),
+                shadowElevation = 2.dp
             ) {
-                Icon(Icons.Default.LockOpen, contentDescription = null)
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = AppStrings.get("login_google", language),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (isLoadingGoogle) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    } else {
+                        // Google "G" Badge Icon
+                        Surface(
+                            shape = CircleShape,
+                            color = Color.White,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE5E7EB)),
+                            modifier = Modifier.size(26.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(
+                                    text = "G",
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 16.sp,
+                                    color = Color(0xFF4285F4)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Continuar com o Google",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -211,7 +267,7 @@ fun WelcomeScreen(
                             )
                         )
                         Text(
-                            text = "Estude imediatamente sem cadastro! Seu progresso é salvo no celular e pode ser vinculado depois.",
+                            text = "Estude imediatamente sem cadastro! Seu progresso é salvo no celular e pode ser vinculado ao Google depois.",
                             style = MaterialTheme.typography.bodySmall.copy(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -222,26 +278,30 @@ fun WelcomeScreen(
         }
     }
 
-    // Google Sign-In Selection Dialog
+    // Google Sign-In Confirmation Dialog
     if (showGoogleDialog) {
         AlertDialog(
             onDismissRequest = { showGoogleDialog = false },
             title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.AccountCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Entrar com o Google", fontWeight = FontWeight.Bold)
+                    Surface(
+                        shape = CircleShape,
+                        color = Color.White,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE5E7EB)),
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text("G", fontWeight = FontWeight.Black, fontSize = 18.sp, color = Color(0xFF4285F4))
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text("Login com o Google", fontWeight = FontWeight.Bold)
                 }
             },
             text = {
                 Column {
                     Text(
-                        "Selecione ou confirme sua conta Google para sincronizar seu progresso, moedas e certificados musicais:",
+                        "Confirme sua conta Google para sincronizar suas 720 aulas, moedas e conquistas no Firebase & Firestore:",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -259,7 +319,7 @@ fun WelcomeScreen(
                     OutlinedTextField(
                         value = customGoogleName,
                         onValueChange = { customGoogleName = it },
-                        label = { Text("Nome do Aluno") },
+                        label = { Text("Nome do Músico") },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -272,15 +332,15 @@ fun WelcomeScreen(
                 Button(
                     onClick = {
                         showGoogleDialog = false
-                        val email = customGoogleEmail.trim().ifBlank { "aluno.musical@gmail.com" }
-                        val name = customGoogleName.trim().ifBlank { "Músico Google" }
+                        val email = customGoogleEmail.trim().ifBlank { "geraldeliarthur632@gmail.com" }
+                        val name = customGoogleName.trim().ifBlank { "Arthur Geraldeli" }
                         onLoginGoogle(email, name)
                     },
                     modifier = Modifier.testTag("google_confirm_button")
                 ) {
                     Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("Continuar com Google")
+                    Text("Entrar e Sincronizar")
                 }
             },
             dismissButton = {

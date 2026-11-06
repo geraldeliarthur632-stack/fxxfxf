@@ -58,4 +58,20 @@ class ExampleUnitTest {
         assertEquals(10.00, BillingManager.calculateCustomPrice(100), 0.001)
         assertEquals(2.50, BillingManager.calculateCustomPrice(25), 0.001)
     }
+
+    @Test
+    fun testQuizAlternativesAreDistributed() {
+        val indices = mutableSetOf<Int>()
+        for (instrument in InstrumentType.entries) {
+            val lessons = CourseRepository.getLessonsForInstrument(instrument)
+            for (lesson in lessons) {
+                for (q in lesson.questions) {
+                    indices.add(q.correctIndex)
+                    assertTrue(q.correctIndex in 0..3)
+                    assertEquals(4, q.options.size)
+                }
+            }
+        }
+        assertTrue("Answers must be distributed across A, B, C, D", indices.size > 1)
+    }
 }

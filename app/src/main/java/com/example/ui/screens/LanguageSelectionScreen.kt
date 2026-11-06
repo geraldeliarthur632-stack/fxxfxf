@@ -52,16 +52,18 @@ fun LanguageSelectionScreen(
 
                 Box(
                     modifier = Modifier
-                        .size(105.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF1E1B4B))
-                        .border(3.dp, Color(0xFFF59E0B), CircleShape),
+                        .size(114.dp)
+                        .clip(RoundedCornerShape(26.dp))
+                        .background(Color(0xFF1A0438))
+                        .border(3.dp, Color(0xFF8B5CF6), RoundedCornerShape(26.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.app_brand_logo),
                         contentDescription = "Logo Mundo da Música",
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(24.dp)),
                         contentScale = ContentScale.Crop
                     )
                 }

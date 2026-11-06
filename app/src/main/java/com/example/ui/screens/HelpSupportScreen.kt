@@ -144,6 +144,103 @@ fun HelpSupportScreen(
                                 }
                             }
                         }
+                        InstrumentType.BAIXO -> {
+                            val strings = listOf(
+                                Pair("4ª Mi (E1 - 41.2 Hz)", 41.20),
+                                Pair("3ª Lá (A1 - 55.0 Hz)", 55.00),
+                                Pair("2ª Ré (D2 - 73.4 Hz)", 73.42),
+                                Pair("1ª Sol (G2 - 98.0 Hz)", 98.00)
+                            )
+                            strings.forEach { (name, freq) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(name, fontWeight = FontWeight.SemiBold)
+                                    FilledTonalButton(
+                                        onClick = { scope.launch { AudioSynthesizer.playTone(freq, 800) } }
+                                    ) {
+                                        Icon(Icons.Default.VolumeUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Ouvir")
+                                    }
+                                }
+                            }
+                        }
+                        InstrumentType.UKULELE -> {
+                            val strings = listOf(
+                                Pair("4ª Sol (G4 - 392 Hz)", 392.00),
+                                Pair("3ª Dó (C4 - 261.6 Hz)", 261.63),
+                                Pair("2ª Mi (E4 - 329.6 Hz)", 329.63),
+                                Pair("1ª Lá (A4 - 440 Hz)", 440.00)
+                            )
+                            strings.forEach { (name, freq) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(name, fontWeight = FontWeight.SemiBold)
+                                    FilledTonalButton(
+                                        onClick = { scope.launch { AudioSynthesizer.playTone(freq, 800) } }
+                                    ) {
+                                        Icon(Icons.Default.VolumeUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Ouvir")
+                                    }
+                                }
+                            }
+                        }
+                        InstrumentType.VIOLINO -> {
+                            val strings = listOf(
+                                Pair("4ª Sol (G3 - 196 Hz)", 196.00),
+                                Pair("3ª Ré (D4 - 293.6 Hz)", 293.66),
+                                Pair("2ª Lá (A4 - 440 Hz)", 440.00),
+                                Pair("1ª Mi (E5 - 659.2 Hz)", 659.25)
+                            )
+                            strings.forEach { (name, freq) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(name, fontWeight = FontWeight.SemiBold)
+                                    FilledTonalButton(
+                                        onClick = { scope.launch { AudioSynthesizer.playTone(freq, 800) } }
+                                    ) {
+                                        Icon(Icons.Default.VolumeUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Ouvir")
+                                    }
+                                }
+                            }
+                        }
+                        InstrumentType.BATERIA -> {
+                            val pieces = listOf(
+                                Pair("Bumbo (80 Hz)", 80.0),
+                                Pair("Surdo (120 Hz)", 120.0),
+                                Pair("Caixa (200 Hz)", 200.0),
+                                Pair("Tom 1 (400 Hz)", 400.0),
+                                Pair("Chimbal (800 Hz)", 800.0)
+                            )
+                            pieces.forEach { (name, freq) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(name, fontWeight = FontWeight.SemiBold)
+                                    FilledTonalButton(
+                                        onClick = { scope.launch { AudioSynthesizer.playTone(freq, 400) } }
+                                    ) {
+                                        Icon(Icons.Default.VolumeUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Ouvir")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

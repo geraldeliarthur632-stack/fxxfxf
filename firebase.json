@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-android-mundodam-ded117d2-58a1-43a2-8653-719ac3f36718",
+      "rules": "firestore.rules"
+    }
+  ]
+}

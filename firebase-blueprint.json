@@ -1,0 +1,28 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with study progress and currency",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "nickname": { "type": "string" },
+        "email": { "type": "string" },
+        "coins": { "type": "integer" },
+        "totalXp": { "type": "integer" },
+        "currentStreak": { "type": "integer" },
+        "selectedInstrument": { "type": "string" },
+        "language": { "type": "string" },
+        "completedLessonsCount": { "type": "integer" },
+        "updatedAt": { "type": "integer" }
+      },
+      "required": ["userId", "nickname", "coins"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user document containing game state and progress"
+    }
+  }
+}

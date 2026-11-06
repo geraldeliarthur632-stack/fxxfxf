@@ -28,6 +28,7 @@ import com.example.model.*
 import com.example.ui.components.CoinBadge
 import com.example.ui.components.MascotBubble
 import com.example.ui.components.StreakBadge
+import com.example.ui.components.StreakCounterCard
 
 @Composable
 fun HomeScreen(
@@ -41,7 +42,8 @@ fun HomeScreen(
     onNavigateAchievements: () -> Unit,
     onNavigateHistory: () -> Unit,
     onNavigateSettings: () -> Unit,
-    onNavigateSupport: () -> Unit
+    onNavigateSupport: () -> Unit,
+    onNavigateTuner: () -> Unit
 ) {
     val instrument = userProfile.selectedInstrument
     val lessons = CourseRepository.getLessonsForInstrument(instrument)
@@ -254,12 +256,79 @@ fun HomeScreen(
                 }
             }
 
+            // Streak Counter Consistency Component
+            StreakCounterCard(
+                streakDays = userProfile.currentStreak,
+                language = userProfile.language,
+                onLearnMoreClick = onNavigateAchievements
+            )
+
             Spacer(modifier = Modifier.height(14.dp))
 
             MascotBubble(
-                message = "Estude pelo menos 1 aula por dia para manter sua ofensiva em chamas e desbloquear conquistas!",
+                message = if (userProfile.currentStreak > 0)
+                    "Incrível! Você tem ${userProfile.currentStreak} dias consecutivos de prática musical. Continue assim hoje para não apagar a chama!"
+                else
+                    "Estude sua aula de hoje para iniciar sua sequência de prática e ganhar bônus de XP!",
                 mascotName = "Maestro Pipo"
             )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Studio Tuner Hero Action Card
+            Card(
+                onClick = onNavigateTuner,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("home_open_tuner_button"),
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.tertiary),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.GraphicEq,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onTertiary,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Afinador Studio",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
+                        )
+                        Text(
+                            text = "Afine ${instrument.getName(userProfile.language)} com microfone ou ouça as notas de referência",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.85f)
+                            )
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Abrir Afinador",
+                        tint = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(14.dp))
 

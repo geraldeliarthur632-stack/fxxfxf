@@ -209,6 +209,17 @@ fun PathLessonNode(
         else -> Color(0xFF9CA3AF) // Locked gray
     }
 
+    val infiniteTransition = rememberInfiniteTransition(label = "pulseCurrent")
+    val pulseScale by infiniteTransition.animateFloat(
+        initialValue = 1.0f,
+        targetValue = if (isCurrent) 1.12f else 1.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 700, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseNode"
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -219,7 +230,9 @@ fun PathLessonNode(
             Surface(
                 shape = RoundedCornerShape(12.dp),
                 color = Color(0xFFF59E0B),
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .scale(pulseScale)
             ) {
                 Text(
                     text = "Começar!",
@@ -233,6 +246,7 @@ fun PathLessonNode(
         Box(
             modifier = Modifier
                 .size(if (isCurrent) 70.dp else 64.dp)
+                .scale(if (isCurrent) pulseScale else 1.0f)
                 .clip(CircleShape)
                 .background(nodeBg)
                 .border(

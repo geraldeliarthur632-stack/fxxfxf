@@ -117,15 +117,23 @@ object CourseRepository {
             InstrumentType.VIOLA_CAIPIRA -> ViolaLessons.allLessons
             InstrumentType.PIANO -> PianoLessons.allLessons
             InstrumentType.TECLADO -> KeyboardLessons.allLessons
+            InstrumentType.BATERIA -> DrumsLessons.allLessons
+            InstrumentType.BAIXO -> BassLessons.allLessons
+            InstrumentType.UKULELE -> UkuleleLessons.allLessons
+            InstrumentType.VIOLINO -> ViolinLessons.allLessons
         }
     }
 
     private val allLessonsMap: Map<String, Lesson> by lazy {
-        val map = HashMap<String, Lesson>(360)
+        val map = HashMap<String, Lesson>(720)
         GuitarLessons.allLessons.forEach { map[it.id] = it }
         ViolaLessons.allLessons.forEach { map[it.id] = it }
         PianoLessons.allLessons.forEach { map[it.id] = it }
         KeyboardLessons.allLessons.forEach { map[it.id] = it }
+        DrumsLessons.allLessons.forEach { map[it.id] = it }
+        BassLessons.allLessons.forEach { map[it.id] = it }
+        UkuleleLessons.allLessons.forEach { map[it.id] = it }
+        ViolinLessons.allLessons.forEach { map[it.id] = it }
         map
     }
 

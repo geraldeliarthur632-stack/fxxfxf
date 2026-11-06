@@ -23,7 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.data.FirebaseManager
 import com.example.model.AppLanguage
 import com.example.model.AppStrings
@@ -39,6 +41,7 @@ fun LoginScreen(
     onForgotPassword: () -> Unit,
     onNavigateRegister: () -> Unit
 ) {
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -83,20 +86,62 @@ fun LoginScreen(
 
             // Quick Google Login Button
             if (onLoginGoogle != null) {
-                OutlinedButton(
-                    onClick = { showGoogleDialog = true },
+                Surface(
+                    onClick = {
+                        isLoading = true
+                        scope.launch {
+                            com.example.data.GoogleAuthHelper.signInWithGoogle(
+                                context = context,
+                                onSuccess = { gEmail, gName ->
+                                    isLoading = false
+                                    onLoginGoogle(gEmail, gName)
+                                },
+                                onError = {
+                                    isLoading = false
+                                    showGoogleDialog = true
+                                },
+                                onFallbackPrompt = {
+                                    isLoading = false
+                                    showGoogleDialog = true
+                                }
+                            )
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
+                        .height(52.dp)
                         .testTag("login_screen_google_button"),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.outlineVariant),
+                    shadowElevation = 2.dp
                 ) {
-                    Icon(Icons.Default.LockOpen, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Entrar com o Google",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Surface(
+                            shape = androidx.compose.foundation.shape.CircleShape,
+                            color = androidx.compose.ui.graphics.Color.White,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFE5E7EB)),
+                            modifier = Modifier.size(26.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(
+                                    text = "G",
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 16.sp,
+                                    color = androidx.compose.ui.graphics.Color(0xFF4285F4)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "Entrar com o Google",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

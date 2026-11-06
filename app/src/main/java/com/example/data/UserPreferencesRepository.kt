@@ -6,12 +6,15 @@ import com.example.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
 class UserPreferencesRepository(context: Context) {
+    private val appContext = context.applicationContext
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val prefs: SharedPreferences = context.getSharedPreferences("mundo_da_musica_prefs", Context.MODE_PRIVATE)
 
     private val _userProfile = MutableStateFlow(loadProfile())
@@ -130,6 +133,10 @@ class UserPreferencesRepository(context: Context) {
 
         _userProfile.value = profile
         checkAchievements(profile)
+
+        scope.launch {
+            FirebaseManager.syncProfileToFirestore(appContext, profile)
+        }
     }
 
     private fun serializeTransactions(list: List<CoinTransaction>): String {

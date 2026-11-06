@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.R
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ fun SettingsScreen(
     onHapticsToggle: (Boolean) -> Unit,
     onLogout: () -> Unit
 ) {
+    val context = LocalContext.current
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -150,6 +152,50 @@ fun SettingsScreen(
                             modifier = Modifier.testTag("switch_haptics")
                         )
                     }
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 10.dp))
+
+                    // FCM Daily Practice Reminders
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.NotificationsActive, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Column {
+                                    Text("Lembretes Diários de Prática", fontWeight = FontWeight.SemiBold)
+                                    Text(
+                                        "FCM ativo para ${userProfile.selectedInstrument.getName(userProfile.language)}",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        FilledTonalButton(
+                            onClick = {
+                                com.example.service.FcmNotificationHelper.sendLocalPracticeNotification(
+                                    context = context,
+                                    instrument = userProfile.selectedInstrument,
+                                    language = userProfile.language
+                                )
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("btn_test_fcm_notification"),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Icon(Icons.Default.NotificationImportant, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Testar Notificação Diária Agora")
+                        }
+                    }
                 }
             }
 
@@ -195,16 +241,18 @@ fun SettingsScreen(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(56.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF1E1B4B))
-                        .border(1.5.dp, Color(0xFFF59E0B), CircleShape),
+                        .size(58.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(Color(0xFF1A0438))
+                        .border(1.5.dp, Color(0xFF8B5CF6), RoundedCornerShape(14.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.app_brand_logo),
                         contentDescription = "Logo",
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(13.dp)),
                         contentScale = ContentScale.Crop
                     )
                 }

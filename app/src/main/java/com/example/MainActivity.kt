@@ -22,8 +22,33 @@ class MainActivity : ComponentActivity() {
 
         val userRepository = UserPreferencesRepository(applicationContext)
 
+        // Request POST_NOTIFICATIONS on Android 13+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            val permissionCheck = androidx.core.content.ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.POST_NOTIFICATIONS
+            )
+            if (permissionCheck != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                androidx.core.app.ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    101
+                )
+            }
+        }
+
         setContent {
             val userProfile by userRepository.userProfile.collectAsState()
+
+            // Automatically subscribe to practice reminders whenever user updates selected instrument or language
+            androidx.compose.runtime.LaunchedEffect(userProfile.selectedInstrument, userProfile.language) {
+                com.example.service.FcmNotificationHelper.setupPracticeReminders(
+                    context = applicationContext,
+                    instrument = userProfile.selectedInstrument,
+                    language = userProfile.language
+                )
+            }
+
             val systemDark = isSystemInDarkTheme()
             val isDark = userProfile.isDarkMode || systemDark
 

@@ -1,6 +1,6 @@
 {
   "name": "Mundo da Música",
-  "description": "Aplicativo gamificado completo para aprender a tocar violão, viola caipira, piano e teclado.",
+  "description": "Aplicativo gamificado completo para aprender a tocar violão, viola caipira, piano, teclado, bateria, contrabaixo, ukulele e violino.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
