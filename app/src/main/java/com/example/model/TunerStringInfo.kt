@@ -84,6 +84,12 @@ object InstrumentTunerData {
                 TunerString("Tom 1", "High Tom", "Tom 1", "E", "Tom Agudo", "High Tom (10\")", "Tom agudo (10\")", 164.81f, "Pele de 10\"", "10\" high rack tom", "Parche de 10\""),
                 TunerString("Caixa", "Snare Drum", "Caja", "A", "Caixa Principal", "Snare (14\")", "Caja principal", 220.00f, "Pele porosa 14\"", "Coated batter head", "Parche poroso 14\"")
             )
+            InstrumentType.CAVAQUINHO -> listOf(
+                TunerString("4ª Corda", "4th String", "4ª Cuerda", "D", "Ré (D4)", "D (D4 - Low D)", "Re (D4 - Bordón)", 293.66f, "Corda mais grave", "Lowest string", "Cuerda más grave"),
+                TunerString("3ª Corda", "3rd String", "3ª Cuerda", "G", "Sol (G4)", "G (G4)", "Sol (G4)", 392.00f, "Corda média", "Middle string", "Cuerda media"),
+                TunerString("2ª Corda", "2nd String", "2ª Cuerda", "B", "Si (B4)", "B (B4)", "Si (B4)", 493.88f, "Corda aguda", "Treble string", "Cuerda aguda"),
+                TunerString("1ª Corda", "1st String", "1ª Cuerda", "D", "Ré (D5)", "D (D5 - High D)", "Re (D5 - Prima)", 587.33f, "Corda mais aguda", "Highest string", "Cuerda más aguda")
+            )
         }
     }
 }

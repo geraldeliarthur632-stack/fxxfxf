@@ -115,14 +115,14 @@ fun RewardedAdScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF16A34A))
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Configuração Google AdMob:", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                                Text("Bloco AdMob Ativo: ${AdMobManager.AD_UNIT_NAME}", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
                             }
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "App ID de Teste: ${AdMobManager.TEST_APP_ID}\nAd Unit ID: ${AdMobManager.getActiveRewardedAdUnitId()}",
-                                style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.outline)
+                                text = "Formato: Anúncio Premiado (Vídeo/Interativo)\nID: ${AdMobManager.PROD_REWARDED_AD_UNIT_ID}\nPrêmio: ${AdMobManager.REWARD_AMOUNT} ${AdMobManager.REWARD_ITEM_NAME}",
+                                style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
                             )
                         }
                     }

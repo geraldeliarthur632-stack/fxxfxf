@@ -74,4 +74,13 @@ class ExampleUnitTest {
         }
         assertTrue("Answers must be distributed across A, B, C, D", indices.size > 1)
     }
+
+    @Test
+    fun testPresetPacksContainExpectedOneTimePurchases() {
+        assertEquals(4, BillingManager.PRESET_PACKS.size)
+        assertEquals(10, BillingManager.PRESET_PACKS[0].coinCount)
+        assertEquals(25, BillingManager.PRESET_PACKS[1].coinCount)
+        assertEquals(50, BillingManager.PRESET_PACKS[2].coinCount)
+        assertEquals(100, BillingManager.PRESET_PACKS[3].coinCount)
+    }
 }

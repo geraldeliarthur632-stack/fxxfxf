@@ -111,6 +111,18 @@ enum class InstrumentType(
         drawableRes = R.drawable.instrument_violin,
         tuningInfo = "G - D - A - E (Sol, Ré, Lá, Mi) afinado em quintas justas",
         category = "Cordas Friccionadas"
+    ),
+    CAVAQUINHO(
+        id = "cavaquinho",
+        namePt = "Cavaquinho",
+        nameEn = "Cavaquinho",
+        nameEs = "Cavaquinho",
+        descPt = "A essência do samba, choro e pagode: domine palhetadas rápidas, levadas percussivas, acordes com pestana e solos brilhantes.",
+        descEn = "The soul of Brazilian Samba and Choro: master fast strumming, syncopated rhythms, bar chords and bright melodic solos.",
+        descEs = "El alma del samba y choro brasileño: domina rasgueos rápidos, ritmos sincopados, cejillas y solos brillantes.",
+        drawableRes = R.drawable.instrument_cavaquinho,
+        tuningInfo = "D - G - B - D (Ré, Sol, Si, Ré) afinação tradicional",
+        category = "Cordas Brasileiras"
     );
 
     fun getName(lang: AppLanguage): String = when (lang) {

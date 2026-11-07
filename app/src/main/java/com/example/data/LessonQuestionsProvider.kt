@@ -44,6 +44,7 @@ object LessonQuestionsProvider {
             InstrumentType.BAIXO -> getBassQuestions(lessonNumber, lessonTitle)
             InstrumentType.UKULELE -> getUkuleleQuestions(lessonNumber, lessonTitle)
             InstrumentType.VIOLINO -> getViolinQuestions(lessonNumber, lessonTitle)
+            InstrumentType.CAVAQUINHO -> getCavaquinhoQuestions(lessonNumber, lessonTitle)
         }
     }
 
@@ -389,6 +390,96 @@ object LessonQuestionsProvider {
             wrongOption3 = "Grafite em pó",
             explanation = "O breu cria o atrito microscópico necessário entre a crina do arco e as cordas de aço/nylon do violino."
         )
+        return listOf(q1, q2)
+    }
+
+    private fun getCavaquinhoQuestions(lessonNumber: Int, title: String): List<QuizQuestion> {
+        val q1: QuizQuestion
+        val q2: QuizQuestion
+
+        when {
+            lessonNumber == 1 -> {
+                q1 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_1",
+                    prompt = "Qual é a afinação tradicional mais utilizada no cavaquinho brasileiro?",
+                    correctOption = "Ré - Sol - Si - Ré (D - G - B - D)",
+                    wrongOption1 = "Mi - Lá - Ré - Sol (E - A - D - G)",
+                    wrongOption2 = "Sol - Dó - Mi - Lá (G - C - E - A)",
+                    wrongOption3 = "Dó - Sol - Ré - Lá (C - G - D - A)",
+                    explanation = "A afinação tradicional brasileira do cavaquinho é DGBD (Ré na 4ª, Sol na 3ª, Si na 2ª e Ré agudo na 1ª corda)."
+                )
+                q2 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_2",
+                    prompt = "Como deve ser o movimento do punho ao tocar a palhetada de samba no cavaquinho?",
+                    correctOption = "Movimento solto e pendular como um leque, sem travar o antebraço",
+                    wrongOption1 = "Movimento rígido do ombro",
+                    wrongOption2 = "Toque apenas com a ponta dos dedos sem palheta",
+                    wrongOption3 = "Puxando as cordas para cima com força",
+                    explanation = "O balanço do samba nasce do punho direito solto e flexível, garantindo velocidade e precisão rítmica."
+                )
+            }
+            lessonNumber in 6..15 -> {
+                q1 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_1",
+                    prompt = "Na aula '$title', qual é a sequência de acordes conhecida como 'quadrado de Sol', clássica nas rodas de samba?",
+                    correctOption = "Sol Maior (G) - Mi Menor (Em) - Lá Menor (Am) - Ré com Sétima (D7)",
+                    wrongOption1 = "Dó - Fá - Sol - Dó",
+                    wrongOption2 = "Lá - Ré - Mi - Lá",
+                    wrongOption3 = "Mi - Si7 - Dó#m - Lá",
+                    explanation = "O 'quadrado de Sol' (G - Em - Am - D7) é a cadência I - vi - ii - V7 mais famosa e tocada do samba e pagode."
+                )
+                q2 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_2",
+                    prompt = "Por que os dedos da mão esquerda devem pressionar as cordas bem próximos aos trastes de metal?",
+                    correctOption = "Para obter um som limpo e cristalino sem trastejos indesejados",
+                    wrongOption1 = "Para desafinar a nota",
+                    wrongOption2 = "Para diminuir o volume do cavaquinho",
+                    wrongOption3 = "Não faz diferença na sonoridade",
+                    explanation = "Pressionar perto do traste reduz o esforço muscular e garante que a nota soe nítida e brilhante."
+                )
+            }
+            lessonNumber in 16..25 -> {
+                q1 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_1",
+                    prompt = "No compasso 2/4 característico do samba, qual é o tempo considerado o mais forte na levada do cavaquinho?",
+                    correctOption = "O tempo 2 (marcação do surdo e caixa)",
+                    wrongOption1 = "O tempo 1",
+                    wrongOption2 = "O tempo 3",
+                    wrongOption3 = "Nenhum tempo tem acento",
+                    explanation = "No samba brasileiro, o tempo 2 recebe a ênfase rítmica principal que impulsiona a dança e o balanço."
+                )
+                q2 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_2",
+                    prompt = "Como é executado o efeito de abafamento rítmico (mute) característico do pagode?",
+                    correctOption = "Aliviando a pressão dos dedos da mão esquerda sobre as cordas sem tirá-los da posição",
+                    wrongOption1 = "Apertando as cordas com o cotovelo",
+                    wrongOption2 = "Colocando uma toalha sobre o tampo",
+                    wrongOption3 = "Palhetando apenas o ar sem encostar nas cordas",
+                    explanation = "O abafamento da mão esquerda corta a sustentação do som, transformando o cavaquinho em um elemento de percussão rítmica."
+                )
+            }
+            else -> {
+                q1 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_1",
+                    prompt = "Na aula '$title', qual é a função das frases de resposta e floreios no cavaquinho durante uma roda de samba?",
+                    correctOption = "Preencher os espaços e dialogar musicalmente com o cantor e a percussão",
+                    wrongOption1 = "Tocar mais alto que todos para abafar os outros instrumentos",
+                    wrongOption2 = "Interromper o andamento da música",
+                    wrongOption3 = "Mudar de tom sem avisar a banda",
+                    explanation = "O cavaquinho atua tanto como instrumento harmônico/rítmico quanto como condutor de contracantos e diálogos melódicos."
+                )
+                q2 = createQuestion(
+                    id = "q_cavaquinho_${lessonNumber}_2",
+                    prompt = "Qual é a vantagem de utilizar acordes com sétimas e diminutos de passagem no Choro e no Samba?",
+                    correctOption = "Conectar os acordes principais de forma suave e com riqueza harmônica sofisticada",
+                    wrongOption1 = "Dificultar a música de propósito",
+                    wrongOption2 = "Evitar ter que afinar o cavaquinho",
+                    wrongOption3 = "Tirar o ritmo da música",
+                    explanation = "Acordes de passagem criam linhas de baixo cromáticas e tensões elegantes típicas da música popular brasileira."
+                )
+            }
+        }
+
         return listOf(q1, q2)
     }
 }

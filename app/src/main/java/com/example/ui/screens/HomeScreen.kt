@@ -351,7 +351,7 @@ fun HomeScreen(
                         Icon(Icons.Default.Storefront, contentDescription = null, tint = Color(0xFFD97706))
                         Spacer(modifier = Modifier.height(6.dp))
                         Text("Loja de Moedas", fontWeight = FontWeight.Bold, color = Color(0xFF92400E))
-                        Text("R$ 0,10 por moeda", style = MaterialTheme.typography.labelSmall, color = Color(0xFFB45309))
+                        Text("Pagamento único Google Play", style = MaterialTheme.typography.labelSmall, color = Color(0xFFB45309))
                     }
                 }
 

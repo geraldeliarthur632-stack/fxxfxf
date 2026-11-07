@@ -241,6 +241,30 @@ fun HelpSupportScreen(
                                 }
                             }
                         }
+                        InstrumentType.CAVAQUINHO -> {
+                            val strings = listOf(
+                                Pair("4ª Ré (D4 - 293.6 Hz)", 293.66),
+                                Pair("3ª Sol (G4 - 392.0 Hz)", 392.00),
+                                Pair("2ª Si (B4 - 493.8 Hz)", 493.88),
+                                Pair("1ª Ré (D5 - 587.3 Hz)", 587.33)
+                            )
+                            strings.forEach { (name, freq) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(name, fontWeight = FontWeight.SemiBold)
+                                    FilledTonalButton(
+                                        onClick = { scope.launch { AudioSynthesizer.playTone(freq, 800) } }
+                                    ) {
+                                        Icon(Icons.Default.VolumeUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Ouvir")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

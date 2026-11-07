@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads Oficiais - Mundo da Música</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0B0715;
+            color: #F3F4F6;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 960px;
+            width: 100%;
+            background: #17102B;
+            border: 1px solid #352654;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+        }
+        h1 {
+            color: #C084FC;
+            font-size: 26px;
+            margin-top: 0;
+            text-align: center;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #D1D5DB;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            color: #E9D5FF;
+            font-size: 20px;
+            border-bottom: 2px solid #372E54;
+            padding-bottom: 8px;
+            margin: 28px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .app-card {
+            background: linear-gradient(135deg, #2D1B54, #1B1235);
+            border: 2px solid #8B5CF6;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+        }
+        .app-card h3 {
+            color: #FFFFFF;
+            font-size: 18px;
+            margin: 0 0 6px 0;
+        }
+        .app-card p {
+            color: #D1D5DB;
+            font-size: 14px;
+            margin: 0 0 16px 0;
+        }
+        .btn-download-app {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #10B981;
+            color: #064E3B;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 16px;
+            width: calc(100% - 48px);
+            transition: transform 0.1s, background 0.2s;
+        }
+        .btn-download-app:hover {
+            background: #059669;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+        .btn-download-apk {
+            background: #8B5CF6;
+            color: #FFFFFF;
+        }
+        .btn-download-apk:hover {
+            background: #7C3AED;
+            color: #FFFFFF;
+        }
+        .feature-box {
+            background: #21173D;
+            border: 1px solid #4C1D95;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .feature-box img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        }
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-top: 16px;
+        }
+        .screenshot-card {
+            background: #21173D;
+            border: 1px solid #4C1D95;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .screenshot-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            margin-bottom: 12px;
+        }
+        .screenshot-card h3 {
+            font-size: 15px;
+            color: #F3F4F6;
+            margin: 6px 0 2px 0;
+        }
+        .screenshot-card span {
+            font-size: 12px;
+            color: #A78BFA;
+            margin-bottom: 12px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #8B5CF6;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            width: calc(100% - 36px);
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #7C3AED;
+        }
+        .btn-large {
+            padding: 14px 28px;
+            font-size: 16px;
+            width: auto;
+            margin-top: 12px;
+        }
+        .badge {
+            background: #059669;
+            color: #ECFDF5;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="badge" style="display: block; width: fit-content; margin: 0 auto 12px auto;">Versão 5.0 (Build 5) • Google Play Store</span>
+        <h1>Mundo da Música — Central de Downloads</h1>
+        <p class="subtitle">Baixe o AAB para o Google Play Console, o APK instalável e os recursos visuais da loja.</p>
+
+        <!-- Arquivos do App -->
+        <h2 class="section-title">📦 1. Pacotes do Aplicativo (Versão 5.0)</h2>
+        <div class="app-downloads-grid">
+            <div class="app-card">
+                <span class="badge">Obrigatório Play Console</span>
+                <h3>Arquivo AAB (App Bundle)</h3>
+                <p>Arquivo para enviar no Google Play Console (Versão 5.0, Play Billing 8.0.0).</p>
+                <a href="MundoDaMusica-v5.aab" download="MundoDaMusica-v5.aab" class="btn-download-app">
+                    ⬇️ Baixar MundoDaMusica-v5.aab
+                </a>
+            </div>
+
+            <div class="app-card">
+                <span class="badge" style="background: #3B82F6; color: white;">Teste em Celular</span>
+                <h3>Arquivo APK (Instalador)</h3>
+                <p>Instale diretamente no seu aparelho Android para testar.</p>
+                <a href="MundoDaMusica-v5.apk" download="MundoDaMusica-v5.apk" class="btn-download-app btn-download-apk">
+                    ⬇️ Baixar MundoDaMusica-v5.apk
+                </a>
+            </div>
+        </div>
+
+        <!-- Recurso Gráfico -->
+        <h2 class="section-title">🖼️ 2. Recurso Gráfico Oficial (1024 x 500 px)</h2>
+        <div class="feature-box">
+            <img src="recurso_grafico_1024x500.png" alt="Recurso Gráfico 1024x500">
+            <br>
+            <a href="recurso_grafico_1024x500.png" download="recurso_grafico_1024x500.png" class="btn btn-large">
+                ⬇️ Baixar Recurso Gráfico PNG (1024x500)
+            </a>
+        </div>
+
+        <!-- 4 Capturas de Tela -->
+        <h2 class="section-title">📱 3. Capturas de Tela (Prints 1080 x 1920 px)</h2>
+        <div class="screenshots-grid">
+            <div class="screenshot-card">
+                <img src="screenshot_1_inicio.png" alt="Print 1 Início">
+                <h3>1. Início</h3>
+                <span>Ofensiva e Instrumento</span>
+                <a href="screenshot_1_inicio.png" download="screenshot_1_inicio.png" class="btn">
+                    ⬇️ Baixar Print 1
+                </a>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="screenshot_2_trilha.png" alt="Print 2 Trilha">
+                <h3>2. Trilha</h3>
+                <span>Módulos de Aula</span>
+                <a href="screenshot_2_trilha.png" download="screenshot_2_trilha.png" class="btn">
+                    ⬇️ Baixar Print 2
+                </a>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="screenshot_3_afinador.png" alt="Print 3 Afinador">
+                <h3>3. Afinador</h3>
+                <span>Detecção Sonora</span>
+                <a href="screenshot_3_afinador.png" download="screenshot_3_afinador.png" class="btn">
+                    ⬇️ Baixar Print 3
+                </a>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="screenshot_4_quiz.png" alt="Print 4 Quiz">
+                <h3>4. Aula & Quiz</h3>
+                <span>Acordes e Exercícios</span>
+                <a href="screenshot_4_quiz.png" download="screenshot_4_quiz.png" class="btn">
+                    ⬇️ Baixar Print 4
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

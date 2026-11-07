@@ -517,6 +517,10 @@ fun AppNavigation(
                     onLogout = {
                         userRepository.logout()
                         navigateTo(Screen.Welcome)
+                    },
+                    onDeleteAccount = {
+                        userRepository.deleteAccount()
+                        navigateTo(Screen.Welcome)
                     }
                 )
             }

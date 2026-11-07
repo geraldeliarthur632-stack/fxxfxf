@@ -392,6 +392,39 @@ class UserPreferencesRepository(context: Context) {
         )
     }
 
+    fun deleteAccount() {
+        // Google Play policy compliant permanent account and data deletion
+        val currentEmail = _userProfile.value.email
+        if (currentEmail != null) {
+            val accountsJson = prefs.getString("local_accounts_json", "{}") ?: "{}"
+            try {
+                val accountsObj = JSONObject(accountsJson)
+                accountsObj.remove(currentEmail.trim().lowercase())
+                prefs.edit().putString("local_accounts_json", accountsObj.toString()).apply()
+            } catch (_: Exception) {}
+        }
+
+        prefs.edit()
+            .remove("user_id")
+            .remove("nickname")
+            .remove("email")
+            .remove("is_guest")
+            .remove("avatar_id")
+            .remove("coins")
+            .remove("last_refill_ts")
+            .remove("current_streak")
+            .remove("last_active_date")
+            .remove("total_xp")
+            .remove("selected_instrument")
+            .remove("unlocked_lessons")
+            .remove("completed_lessons")
+            .remove("transactions_json")
+            .putBoolean("has_completed_onboarding", false)
+            .apply()
+
+        _userProfile.value = loadProfile()
+    }
+
     private fun loadAchievements(): List<Achievement> {
         return listOf(
             Achievement("first_step", "Primeiro Som", "First Sound", "Primer Sonido", "Conclua sua primeira aula em qualquer instrumento.", "Complete your first lesson.", "Completa tu primera lección.", "music_note"),

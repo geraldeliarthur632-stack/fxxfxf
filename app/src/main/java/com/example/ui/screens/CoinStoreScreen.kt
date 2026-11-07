@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.BillingManager
@@ -36,18 +34,14 @@ fun CoinStoreScreen(
     onBuyCoins: (amount: Int, totalPriceBrl: Double) -> Unit,
     onWatchAd: () -> Unit
 ) {
-    var customQuantityText by remember { mutableStateOf("20") }
     var showPurchaseDialog by remember { mutableStateOf(false) }
-    var selectedPackToBuy by remember { mutableStateOf<Pair<Int, Double>?>(null) }
+    var selectedPackToBuy by remember { mutableStateOf<BillingManager.ProductPack?>(null) }
     var purchaseSuccessMessage by remember { mutableStateOf<String?>(null) }
-
-    val customQty = customQuantityText.toIntOrNull()?.coerceIn(1, 1000) ?: 10
-    val customPrice = BillingManager.calculateCustomPrice(customQty)
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Loja de Notas Musicais", fontWeight = FontWeight.Bold) },
+                title = { Text("Loja de Moedas", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack, modifier = Modifier.testTag("store_back_button")) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
@@ -134,10 +128,49 @@ fun CoinStoreScreen(
                 }
             }
 
+            // Billing Info Banner (Pagamento Único)
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier.padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.ShoppingBag,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text(
+                                text = "Pagamento Único • Google Play Billing",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            )
+                            Text(
+                                text = "Sem assinaturas ou cobranças recorrentes. Você paga uma única vez por pacote de moedas.",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
             // Fixed Packs Title
             item {
                 Text(
-                    text = "Pacotes Prontos (R$ 0,10 por moeda):",
+                    text = "Escolha um Pacote de Moedas:",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }
@@ -148,7 +181,8 @@ fun CoinStoreScreen(
                     modifier = Modifier.fillMaxWidth().testTag("pack_${pack.coinCount}"),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                 ) {
                     Row(
                         modifier = Modifier
@@ -157,7 +191,7 @@ fun CoinStoreScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                             Box(
                                 modifier = Modifier
                                     .size(44.dp)
@@ -169,108 +203,31 @@ fun CoinStoreScreen(
                             Spacer(modifier = Modifier.width(14.dp))
                             Column {
                                 Text(pack.label, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                                if (pack.subtitle.isNotEmpty()) {
+                                    Text(
+                                        text = pack.subtitle,
+                                        style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary)
+                                    )
+                                }
                                 Text(
                                     text = "${pack.coinCount} aulas desbloqueadas",
-                                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 )
                             }
                         }
 
                         Button(
                             onClick = {
-                                selectedPackToBuy = Pair(pack.coinCount, pack.priceBrl)
+                                selectedPackToBuy = pack
                                 showPurchaseDialog = true
                             },
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.testTag("buy_pack_${pack.coinCount}")
                         ) {
                             Text(
                                 text = "R$ " + String.format(Locale.US, "%.2f", pack.priceBrl),
                                 fontWeight = FontWeight.Bold
                             )
-                        }
-                    }
-                }
-            }
-
-            // Custom Quantity Calculator
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth().testTag("custom_coin_card"),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Quantidade Personalizada:",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Digite exatamente quantas moedas deseja comprar. O valor total é calculado automaticamente.",
-                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        )
-
-                        Spacer(modifier = Modifier.height(14.dp))
-
-                        OutlinedTextField(
-                            value = customQuantityText,
-                            onValueChange = { customQuantityText = it.filter { char -> char.isDigit() } },
-                            label = { Text("Quantidade de Moedas") },
-                            leadingIcon = { Icon(Icons.Default.MusicNote, contentDescription = null) },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth().testTag("custom_coin_input"),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(14.dp))
-
-                        // Dynamic calculation summary
-                        Card(
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                        ) {
-                            Column(modifier = Modifier.padding(12.dp)) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text("Quantidade:", style = MaterialTheme.typography.bodyMedium)
-                                    Text("$customQty moedas", fontWeight = FontWeight.Bold)
-                                }
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text("Valor unitário:", style = MaterialTheme.typography.bodyMedium)
-                                    Text("R$ 0,10 / un", fontWeight = FontWeight.Medium)
-                                }
-                                HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text("Valor Total:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
-                                    Text(
-                                        text = "R$ " + String.format(Locale.US, "%.2f", customPrice),
-                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
-                                    )
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(14.dp))
-
-                        Button(
-                            onClick = {
-                                selectedPackToBuy = Pair(customQty, customPrice)
-                                showPurchaseDialog = true
-                            },
-                            modifier = Modifier.fillMaxWidth().height(48.dp).testTag("custom_buy_btn"),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("Comprar $customQty Moedas", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -332,20 +289,24 @@ fun CoinStoreScreen(
     }
 
     if (showPurchaseDialog && selectedPackToBuy != null) {
-        val (qty, price) = selectedPackToBuy!!
+        val pack = selectedPackToBuy!!
         AlertDialog(
             onDismissRequest = { showPurchaseDialog = false },
-            title = { Text("Confirmar Compra") },
+            title = { Text("Confirmar Pagamento Único") },
             text = {
                 Column {
                     Text("Você está adquirindo:")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("• $qty Notas Musicais (Moedas)", fontWeight = FontWeight.Bold)
-                    Text("• Valor Unitário: R$ 0,10")
-                    Text("• Valor Total: R$ ${String.format(Locale.US, "%.2f", price)}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    Text("• ${pack.label} (${pack.coinCount} Moedas)", fontWeight = FontWeight.Bold)
+                    Text("• Pagamento Único (Google Play In-App Billing)")
+                    Text(
+                        "• Valor Total: R$ ${String.format(Locale.US, "%.2f", pack.priceBrl)}",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        "Integração Google Play Billing pronta para produção. O crédito das moedas será registrado no histórico.",
+                        "Cobrança única via Google Play. Sem renovação automática. As moedas ficam disponíveis imediatamente para você desbloquear suas aulas.",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -353,13 +314,13 @@ fun CoinStoreScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        onBuyCoins(qty, price)
+                        onBuyCoins(pack.coinCount, pack.priceBrl)
                         showPurchaseDialog = false
-                        purchaseSuccessMessage = "Compra confirmada! +$qty moedas adicionadas à sua conta."
+                        purchaseSuccessMessage = "Compra confirmada! +${pack.coinCount} moedas adicionadas à sua conta."
                     },
                     modifier = Modifier.testTag("confirm_purchase_btn")
                 ) {
-                    Text("Confirmar")
+                    Text("Confirmar Compra")
                 }
             },
             dismissButton = {
